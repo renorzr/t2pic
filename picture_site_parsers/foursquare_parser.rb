@@ -5,7 +5,7 @@ module PictureSiteParsers
     end
 
     def extract_picture
-      @doc.xpath("//img[@class='mainPhoto']").attr('src').value
+      @doc.xpath("//div[@class='commentPhoto']/img").attr('src').value
     end
   end
 end
