@@ -1,11 +1,10 @@
 require 'nokogiri'
 require 'curb'
-require File.expand_path('picture_site_parsers/parser_base', File.dirname(__FILE__))
-require File.expand_path('picture_site_parsers/picplz_parser', File.dirname(__FILE__))
+require File.expand_path('picture_site_parsers/loader', File.dirname(__FILE__))
 
 class PictureExtractor
   def initialize
-    @parsers = [PictureSiteParsers::PicplzParser.new]
+    @parsers = ParserLoader.all
   end
 
   def extract(url)
@@ -21,7 +20,7 @@ class PictureExtractor
 
     @parsers.each do |parser|
       url = parser.get_picture_url(@body, @doc)
-      picture = Magick::Image.from_blob(Curl::Easy.http_get(url).body_str).first
+      picture = Magick::Image.from_blob(Curl::Easy.http_get(url).body_str).first if url
       break if picture
     end
 

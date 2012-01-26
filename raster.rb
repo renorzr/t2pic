@@ -3,17 +3,16 @@ require File.expand_path('picture_extractor', File.dirname(__FILE__))
 
 class Raster
   DEFAULT_POINTSIZE = 20
-  DEFAULT_FONT = '/home/reno/fonts/simkai.ttf'
   DEFAULT_TEXT_WIDTH = 500
+  PICTURE_EXTRACTOR = PictureExtractor.new
 
   def initialize(text, opts = {})
     @image = Magick::ImageList.new
-    @picture_extractor = PictureExtractor.new
     @text = text
 
     @text_width  = (opts[:text_width] || DEFAULT_TEXT_WIDTH).to_i
     @pointsize   = (opts[:pointsize] || DEFAULT_POINTSIZE).to_i
-    @font        = opts[:font] || DEFAULT_FONT
+    @font        = opts[:font]
     @rows        = (@text.length.to_f / @pointsize).ceil
     @cols        = @text_width / @pointsize
     @vertical    = opts[:vertical] != false
@@ -41,7 +40,7 @@ class Raster
   end
 
   def get_pic(url)
-    @picture_extractor.extract(url)
+    PICTURE_EXTRACTOR.extract(url)
   end
 
   def extract_urls

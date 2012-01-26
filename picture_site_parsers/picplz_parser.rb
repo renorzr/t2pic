@@ -1,7 +1,7 @@
 module PictureSiteParsers
   class PicplzParser < ParserBase
     def signature
-      'picplz'
+      'picplzthumbs'
     end
 
     def extract_picture

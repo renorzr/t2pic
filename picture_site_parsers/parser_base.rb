@@ -10,9 +10,5 @@ module PictureSiteParsers
     def is_the_site?
       @body.include?(signature)
     end
-
-    def extract_picture
-      @doc
-    end
   end
 end
