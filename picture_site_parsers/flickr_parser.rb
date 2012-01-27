@@ -1,7 +1,7 @@
 module PictureSiteParsers
   class FlickrParser < ParserBase
     def signature
-      'static.flickr.com'
+      'Flickr'
     end
 
     def extract_picture
