@@ -5,6 +5,7 @@ FONT = '/usr/share/fonts/simkai.ttf'
 
 get '/' do
   text = params[:text]
-  send_file(Raster.new(text, :font => FONT).file)
+  pic = params[:pic]
+  send_file(Raster.new(text, :font => FONT, :pic => pic).file)
 end
 

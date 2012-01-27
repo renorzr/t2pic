@@ -9,6 +9,7 @@ class Raster
   def initialize(text, opts = {})
     @image = Magick::ImageList.new
     @text = text
+    @pic_url = opts[:pic]
 
     @text_width  = (opts[:text_width] || DEFAULT_TEXT_WIDTH).to_i
     @pointsize   = (opts[:pointsize] || DEFAULT_POINTSIZE).to_i
@@ -27,12 +28,21 @@ class Raster
 
   def pic
     @image.push(text_image)
-    
+    add_specified_picture
+    add_extracted_pictures
+
+    return @image.append(@vertical)
+  end
+
+  def add_specified_picture
+    data = @pic_url && get_pic(@pic_url)
+    @image.push(data) if data
+  end
+
+  def add_extracted_pictures
     extract_pictures.each do |picture|
       @image.push(picture)
     end
-
-    return @image.append(@vertical)
   end
 
   def extract_pictures

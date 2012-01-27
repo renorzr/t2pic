@@ -3,7 +3,7 @@ require 'net/http'
 class RedirectFollower
   class TooManyRedirects < StandardError; end
   
-  attr_accessor :url, :body, :redirect_limit, :response
+  attr_accessor :url, :body, :redirect_limit, :response, :content_type
   
   def initialize(url, limit=5)
     @url, @redirect_limit = url, limit
@@ -28,6 +28,7 @@ class RedirectFollower
     end
     
     self.body = response.body
+    self.content_type = response.content_type
     self
   end
 

@@ -8,24 +8,23 @@ class PictureExtractor
   end
 
   def extract(url)
-    @body = RedirectFollower.new(url).resolve.body
-    @doc  = Nokogiri::HTML(@body)
+    @response = RedirectFollower.new(url).resolve
+    @doc      = Nokogiri::HTML(@response.body)
 
     return get_picture
   end
 
   def get_picture
-    picture = nil
+    data = get_picture_binary
+    return data && Magick::Image.from_blob(data).first
+  end
+
+  def get_picture_binary
+    return @response.body if @response.content_type.match(/image/)
 
     @parsers.each do |parser|
-      url = parser.get_picture_url(@body, @doc)
-      if url
-        data =  RedirectFollower.new(url).resolve.body
-        picture = Magick::Image.from_blob(data).first
-        break if picture
-      end
+      url = parser.get_picture_url(@response.body, @doc)
+      return url && RedirectFollower.new(url).resolve.body 
     end
-
-    return picture
   end
 end
