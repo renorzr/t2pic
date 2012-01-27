@@ -3,21 +3,27 @@ require File.expand_path('picture_extractor', File.dirname(__FILE__))
 
 class Raster
   DEFAULT_POINTSIZE = 20
-  DEFAULT_TEXT_WIDTH = 500
+  DEFAULT_TEXT_WIDTH = 900
   PICTURE_EXTRACTOR = PictureExtractor.new
 
   def initialize(text, opts = {})
-    @image = Magick::ImageList.new
-    @text = text
+    @image   = Magick::ImageList.new
+    @text    = text
     @pic_url = opts[:pic]
 
-    @text_width  = (opts[:text_width] || DEFAULT_TEXT_WIDTH).to_i
-    @pointsize   = (opts[:pointsize] || DEFAULT_POINTSIZE).to_i
-    @font        = opts[:font]
-    @rows        = (@text.length.to_f / @pointsize).ceil
-    @cols        = @text_width / @pointsize
-    @vertical    = opts[:vertical] != false
-    @text_height = @rows * @pointsize
+    @pointsize = (opts[:pointsize] || DEFAULT_POINTSIZE).to_i
+    @font      = opts[:font]
+    @vertical  = opts[:vertical] != false
+
+    max_text_width = (opts[:text_width] || DEFAULT_TEXT_WIDTH).to_i
+    @cols          = max_text_width / @pointsize
+    @text_width    = [min_text_width, max_text_width].max
+    @rows          = (@text.length.to_f / @pointsize).ceil
+    @text_height   = (@rows + 1) * @pointsize
+  end
+
+  def min_text_width
+    (@cols + 1) * @pointsize
   end
 
   def file(format=:jpg)
