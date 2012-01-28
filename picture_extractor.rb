@@ -20,11 +20,24 @@ class PictureExtractor
   end
 
   def get_picture_binary
-    return @response.body if @response.content_type.match(/image/)
+    return (
+      if @response.content_type.match(/image/)
+        @response.body 
+      else
+        try_all_parsers
+      end
+    )
+  end
+
+  def try_all_parsers
+    result = nil
 
     @parsers.each do |parser|
       url = parser.get_picture_url(@response.body, @doc)
-      return url && RedirectFollower.new(url).resolve.body 
+      result = url && RedirectFollower.new(url).resolve.body 
+      break if result
     end
+
+    return result
   end
 end
