@@ -20,7 +20,6 @@ class Raster
     @rows          = (@text.length.to_f / @cols).ceil
     @text_width    = (@rows == 1) ? one_row_text_width : max_text_width
     @text_height   = (@rows + 1) * @pointsize
-    puts "max_text_width=#{max_text_width} text_width=#{@text_width}"
   end
 
   def one_row_text_width
