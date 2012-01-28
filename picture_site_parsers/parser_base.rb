@@ -5,6 +5,8 @@ module PictureSiteParsers
       @doc = doc
       return false unless is_the_site?
       return extract_picture
+    rescue
+      return nil
     end
 
     def is_the_site?
