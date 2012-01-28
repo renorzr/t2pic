@@ -3,7 +3,7 @@ require File.expand_path('picture_extractor', File.dirname(__FILE__))
 
 class Raster
   DEFAULT_POINTSIZE = 20
-  DEFAULT_TEXT_WIDTH = 900
+  DEFAULT_TEXT_WIDTH = 500
   PICTURE_EXTRACTOR = PictureExtractor.new
 
   def initialize(text, opts = {})
@@ -17,13 +17,14 @@ class Raster
 
     max_text_width = (opts[:text_width] || DEFAULT_TEXT_WIDTH).to_i
     @cols          = max_text_width / @pointsize
-    @text_width    = [min_text_width, max_text_width].max
-    @rows          = (@text.length.to_f / @pointsize).ceil
+    @rows          = (@text.length.to_f / @cols).ceil
+    @text_width    = (@rows == 1) ? one_row_text_width : max_text_width
     @text_height   = (@rows + 1) * @pointsize
+    puts "max_text_width=#{max_text_width} text_width=#{@text_width}"
   end
 
-  def min_text_width
-    (@cols + 1) * @pointsize
+  def one_row_text_width
+    (@text.length+1) * @pointsize
   end
 
   def file(format=:jpg)
