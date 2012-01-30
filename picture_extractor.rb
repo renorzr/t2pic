@@ -12,6 +12,8 @@ class PictureExtractor
     @doc      = Nokogiri::HTML(@response.body)
 
     return get_picture
+  rescue
+    return nil
   end
 
   def get_picture
