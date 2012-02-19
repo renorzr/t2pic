@@ -71,6 +71,8 @@ class Raster
       self.size      = ts
       self.pointsize = ps
       self.font      = ft
+      self.fill      = 'white'
+      self.background_color = 'black'
     end.first
   end
 
